@@ -1,6 +1,5 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Transate: React Native app
  *
  * @format
  * @flow strict-local
@@ -18,12 +17,10 @@ import {
 } from 'react-native';
 
 import {
-  LearnMoreLinks,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-import { Header, Colors, LanguagePicker } from './src/components';
+    Header,
+    Colors,
+    LanguagePicker 
+} from './src/components';
 
 const App: () => React$Node = () => {
   return (
@@ -73,23 +70,6 @@ const App: () => React$Node = () => {
             </View>
             {/* END target */}
 
-            {/*}
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            */}
-            {/*
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-            */}
         </View>
         {/* END body*/}
 

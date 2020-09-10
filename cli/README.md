@@ -1,5 +1,6 @@
+# translate
 translate is a simple, easy-to-use command line interface for the Google
-Translation API. 
+Translation API.
 
 
 Usage  
@@ -21,7 +22,7 @@ Options
 =======
 
 The language of the source text (-s | --src) and the language of the target
-text (-t | --targ) are required. If no input file (-i | --infile) is given, 
+text (-t | --targ) are required. If no input file (-i | --infile) is given,
 the source text is assumed to be everything after the options from standard
 input. If no output file (-o | --ofile) is given, the target text is written
 to standard output.
@@ -41,5 +42,7 @@ Example
 This call translates the english text in source.txt to french and writes
 the result to target.txt.
 
+License
+=======
 
-Ryan Cormier <rydcormier@gmail.com> - August 6th, 2020
+All work is released under the MIT license. See [`LICENSE`](../LICENSE.md) for details.

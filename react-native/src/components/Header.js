@@ -20,7 +20,7 @@ const Header = (): Node => (
     source={require('./logo.png')}
     style={styles.background}
     imageStyle={styles.logo}>
-    <Text style={styles.text}>Welcome to Translate</Text>
+    <Text style={styles.text}>Translate</Text>
   </ImageBackground>
 );
 

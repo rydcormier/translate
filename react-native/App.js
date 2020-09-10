@@ -19,7 +19,10 @@ import {
 import {
     Header,
     Colors,
-    LanguagePicker
+    LanguagePicker,
+    SourceText,
+    TargetText,
+    Controller
 } from './src/components';
 
 const App: () => React$Node = () => {
@@ -36,32 +39,26 @@ const App: () => React$Node = () => {
           <View style={styles.body}>
 
             {/* source */}
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Enter Some Text</Text>
-              <Text style={styles.sectionDescription}>
-                Hello world!
-              </Text>
+            <View style={[
+                    styles.container, {borderBottomColor: Colors.light,
+                        borderBottomWidth: 1,}]}>
+                <SourceText />
             </View>
             {/* END source */}
 
-            {/* picker */}
-            <View style={styles.sectionContainer}>
-                <LanguagePicker />
-            </View>
-            {/* END picker */}
-
             {/* controller */}
-            <View style={[styles.sectionContainer, styles.button]}>
-                <Button color={Colors.white} title="Translate" />
+            <View style={styles.container}>
+                <Controller />
             </View>
             {/* END controller */}
 
             {/* target */}
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Translation</Text>
-              <Text style={styles.sectionDescription}>
-                Bonjour le monde!
-              </Text>
+              <TargetText
+                  sl="en"
+                  tl="fr"
+                  q="Hello world!"
+                  />
             </View>
             {/* END target */}
 

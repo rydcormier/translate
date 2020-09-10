@@ -17,4 +17,5 @@ export default {
   light: '#DAE1E7',
   dark: '#444',
   black: '#000',
+  purple: '#9840B8',
 };

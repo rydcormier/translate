@@ -20,7 +20,7 @@ const Header = (): Node => (
     source={require('./logo.png')}
     style={styles.background}
     imageStyle={styles.logo}>
-    <Text style={styles.text}>Welcome to React</Text>
+    <Text style={styles.text}>Welcome to Translate</Text>
   </ImageBackground>
 );
 
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     paddingTop: 96,
     paddingHorizontal: 32,
-    backgroundColor: Colors.lighter,
+    backgroundColor: Colors.white,
   },
   logo: {
     opacity: 0.2,

@@ -14,15 +14,16 @@ import {
   View,
   Text,
   StatusBar,
+  Button
 } from 'react-native';
 
 import {
-  Header,
   LearnMoreLinks,
-  Colors,
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import { Header, Colors, LanguagePicker } from './src/components';
 
 const App: () => React$Node = () => {
   return (
@@ -38,26 +39,49 @@ const App: () => React$Node = () => {
               <Text style={styles.footer}>Engine: Hermes</Text>
             </View>
           )}
+
+          {/* body */}
           <View style={styles.body}>
+
+            {/* source */}
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
+              <Text style={styles.sectionTitle}>Enter Some Text</Text>
               <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
+                Hello world!
               </Text>
             </View>
+            {/* END source */}
+
+            {/* picker */}
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
+                <LanguagePicker />
+            </View>
+            {/* END picker */}
+
+            {/* controller */}
+            <View style={[styles.sectionContainer, styles.button]}>
+                <Button color={Colors.white} title="Translate" />
+            </View>
+            {/* END controller */}
+
+            {/* target */}
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>See Your Translation</Text>
               <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
+                Bonjour le monde!
               </Text>
             </View>
+            {/* END target */}
+
+            {/*}
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Debug</Text>
               <Text style={styles.sectionDescription}>
                 <DebugInstructions />
               </Text>
             </View>
+            */}
+            {/*
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Learn More</Text>
               <Text style={styles.sectionDescription}>
@@ -65,7 +89,10 @@ const App: () => React$Node = () => {
               </Text>
             </View>
             <LearnMoreLinks />
-          </View>
+            */}
+        </View>
+        {/* END body*/}
+
         </ScrollView>
       </SafeAreaView>
     </>
@@ -108,6 +135,12 @@ const styles = StyleSheet.create({
     padding: 4,
     paddingRight: 12,
     textAlign: 'right',
+  },
+  button: {
+      backgroundColor: Colors.purple,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginHorizontal: 24,
   },
 });
 

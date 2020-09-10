@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Picker } from '@react-native-community/picker';
 
-const PickerItems = () => {
+const LanguagePicker = (props) => {
+    [ language, setLanguage ] = useState('en');
     return (
-        <>
+        <Picker
+            selectedValue={ language }
+            onValueChange={ (itemValue, itemIndex) => setLanguage(itemValue) }
+        >
         <Picker.Item label="afrikaans" value="af" />
         <Picker.Item label="albanian" value="sq" />
         <Picker.Item label="amharic" value="am" />
@@ -111,18 +115,6 @@ const PickerItems = () => {
         <Picker.Item label="yiddish" value="yi" />
         <Picker.Item label="yoruba" value="yo" />
         <Picker.Item label="zulu" value="zu" />
-        </>
-    );
-}
-
-const LanguagePicker = (props) => {
-    [ language, setLanguage ] = useState('en');
-    return (
-        <Picker
-            selectedValue={ language }
-            onValueChange={ (itemValue, itemIndex) => setLanguage(itemValue) }
-        >
-            <PickerItems />
         </Picker>
     );
 }

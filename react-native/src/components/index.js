@@ -9,8 +9,8 @@
 
 'use strict';
 
-import Header from './components/Header';
-import Colors from './components/Colors';
-import LanguagePicker from './components/LanguagePicker';
+import Header from './Header';
+import Colors from './Colors';
+import LanguagePicker from './LanguagePicker';
 
 export {Header, Colors, LanguagePicker};

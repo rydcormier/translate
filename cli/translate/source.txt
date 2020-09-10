@@ -1,0 +1,3 @@
+This is my first topcoder challenge. I am unsure how I feel about the whole
+process; It is too early to tell. If you are reading this, I hope all is well
+and I hope this program works.

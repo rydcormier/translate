@@ -5,7 +5,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,6 +15,8 @@ import {
   StatusBar,
   Button
 } from 'react-native';
+
+import { Picker } from '@react-native-community/picker';
 
 import {
     Header,

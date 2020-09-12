@@ -4,7 +4,7 @@ Originally a cli for a practice programming challenge on [Topcoder](https://www.
 that leverages the Google Translation API and allows me to practice using
 all the frameworks I have used in the past.
 
-![Latest Screenshot](/screenshots/screen_shot 2020-09-12.png) The latest working prototype
+![Latest Screenshot](screen_shot.png) The latest working prototype
 in ios using React Native.
 
 ## License

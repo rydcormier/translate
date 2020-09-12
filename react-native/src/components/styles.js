@@ -2,7 +2,7 @@ import React from 'react';
 
 import { StyleSheet } from 'react-native';
 
-import { Colors } from '../components';
+import { Colors } from '../Components';
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
   bordered : {
       borderColor: Colors.light,
       borderWidth: 1,
-      height: 100
+      height: 100,
+      padding: 12
   },
 });
 

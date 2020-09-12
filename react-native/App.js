@@ -21,12 +21,10 @@ import { Picker } from '@react-native-community/picker';
 import {
     Header,
     Colors,
-    LanguagePicker,
-    SourceText,
-    TargetText,
     Controller,
+    AppController,
     styles
-} from './src/components';
+} from './src/Components';
 
 const App: () => React$Node = () => {
     return (
@@ -37,13 +35,13 @@ const App: () => React$Node = () => {
                 contentInsetAdjustmentBehavior="automatic"
                 style={styles.scrollView}>
                 <Header />
-                
+
                 {/* body */}
                 <View style={styles.body}>
 
                     {/* controller */}
                     <View style={styles.container}>
-                        <Controller />
+                        <AppController />
                     </View>
                     {/* END controller */}
 

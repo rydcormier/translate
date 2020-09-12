@@ -1,56 +1,54 @@
 import React, { Component } from 'react';
+
 import {
     View,
     Text,
     TextInput,
     Button,
-    ActivityIndicator
+    FlatList
 } from 'react-native';
 
 import { Picker } from '@react-native-community/picker';
 
 import { Colors, styles } from '../Components';
 
-const url = 'https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=%25s&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e&';
+const encodedBody = (obj) => {
+    var body = { 'sl' : 'auto', 'tl' : obj.state.language, 'q' : obj.state.source   };
+    var formBody = [];
+    for ( var item in body ) {
+        var key = encodeURIComponent(item);
+        var val = encodeURIComponent(body[item]);
+        formBody.push(key + "=" + val);
+    }
+    return formBody.join('&');
+}
 
-const headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'User-Agent': 'AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1'
-};
+const TargetText = (data) => {
+    var text = data.map((item, id) => {item.trans});
+    return text.join(' ');
+}
 
-class Controller extends Component {
-    state = {
-        source      : '',
-        language    : 'fr',
-        target      : '',
-        data        : [],
-    };
-
-    parseData = (json) => {
-        var text = '';
-        for ( var i = 0; i < json.length; ++i ) {
-            text = text + ' ' + json.trans;
-        }
-        this.setState({ data : json });
-        this.setState({ target : text });
-        this.setState({ loading : false });
+export default class AppController extends Component {
+    constructor(props) {
+        super(props);
+        this.handlePress = this.handlePress.bind(this);
     }
 
-    onPress = () => {
-        var body = { 'sl' : 'auto', 'tl' : this.state.language, 'q' : this.state.source };
-        var formBody = [];
-        for ( var key in body ) {
-            var encodedKey = encodeURIComponent(key);
-            var encodedValue = encodeURIComponent(body[key]);
-            formBody.push(encodedKey + "=" + encodedValue);
-        }
-        formBody = formBody.join('&');
-        fetch( url, { method : 'POST', headers : headers, body : formBody })
-        .then((response) => response.json())
-        .then((json) => this.parseData(json.sentences))
-        .catch((err) => console.error(err))
-        .finally(() => this.setState({ loading : false }));
+    state = { source: 'Hello world!', language: 'fr', target: 'Bonjour le monde!', data : [] };
+
+    handlePress(e) {
+        fetch( 'https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=%25s&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e&', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'User-Agent': 'AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1' },
+            body: encodedBody(this) })
+            .then((response) => response.json())
+            .then((json) => this.setState({ data : json.sentences }))
+            .catch((err) => console.error(err));
     }
+
+
 
     render() {
         return (
@@ -194,20 +192,22 @@ class Controller extends Component {
                     <Button
                         title="Translate"
                         color={Colors.white}
-                        onPress={this.onPress}
+                        onPress={this.handlePress}
                         />
                 </View>
                 <View style={[styles.bordered, {marginTop: 32, flex: 1, justifyContent: 'center'}]}>
-                    <Text
-                        style={[styles.sectionDescription, {textAlign: 'center'}]}>
-                        { this.state.target }
-                    </Text>
+                        { this.state.data ? (
+                            <Text
+                                style={[styles.sectionDescription, {textAlign: 'justify'}]}
+                                >
+                                {TargetText(this.state.data)}
+                            </Text> ) : <Text></Text>
+                        }
                 </View>
             </View>
             {/* END target */}
             </>
         );
     }
-}
 
-export default Controller;
+}

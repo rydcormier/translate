@@ -13,10 +13,12 @@ import Header from './Header';
 import Colors from './Colors';
 import Controller from './Controller';
 import styles from './styles';
+import AppController from './AppController'
 
 export {
     Header,
     Colors,
     Controller,
-    styles
+    styles,
+    AppController
 };

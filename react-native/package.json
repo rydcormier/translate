@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/picker": "^1.7.1",
+    "nuclide": "^0.366.0",
     "react": "16.13.1",
     "react-native": "0.63.2"
   },

@@ -1,8 +1,7 @@
 /**
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Ryan Cormier <rydcormier@gmail.com>
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * This source code is licensed under the MIT license.
  *
  * @flow strict-local
  * @format
@@ -35,12 +34,6 @@ const styles = StyleSheet.create({
     opacity: 0.2,
     overflow: 'visible',
     resizeMode: 'cover',
-    /*
-     * These negative margins allow the image to be offset similarly across screen sizes and component sizes.
-     *
-     * The source logo.png image is 512x512px, so as such, these margins attempt to be relative to the
-     * source image's size.
-     */
     marginLeft: -128,
     marginBottom: -192,
   },

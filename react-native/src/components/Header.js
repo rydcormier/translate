@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: '600',
     textAlign: 'center',
-    color: Colors.black,
+    color: Colors.purple,
   },
 });
 

@@ -57,10 +57,6 @@ class Controller extends Component {
             <>
             {/* source */}
             <View style={styles.sectionContainer}>
-                <View style={styles.rowContainer}>
-                    <Text style={styles.sectionTitle}>Enter some text</Text>
-                    <Button title="Clear" onPress={() => this.setState({ source : '' })} />
-                </View>
                 <View style={styles.bordered}>
                     <TextInput
                         style={styles.sectionDescription}
@@ -69,12 +65,14 @@ class Controller extends Component {
                         onChangeText={ text => this.setState({source:text}) }
                         />
                 </View>
+                <View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <Button title="Clear" onPress={() => this.setState({ source : '' })} />
+                </View>
             </View>
             {/* END source */}
 
             {/* picker */}
             <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>Choose a language</Text>
                 <Picker
                     selectedValue={ this.state.language }
                     onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>

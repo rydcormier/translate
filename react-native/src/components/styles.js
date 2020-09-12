@@ -25,9 +25,8 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+    fontSize: 20,
+    fontWeight: '600',
     color: Colors.dark,
   },
   highlight: {
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.purple,
   },
   bordered : {
-      borderColor: Colors.light,
+      borderColor: Colors.purple,
       borderWidth: 1,
       height: 100,
       padding: 12

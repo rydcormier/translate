@@ -16,7 +16,7 @@ import React from 'react';
 const Header = (): Node => (
   <ImageBackground
     accessibilityRole={'image'}
-    source={require('./logo.png')}
+    source={require('../Assets/images/logo.png')}
     style={styles.background}
     imageStyle={styles.logo}>
     <Text style={styles.text}>Translate</Text>

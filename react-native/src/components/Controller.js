@@ -11,45 +11,54 @@ import { Picker } from '@react-native-community/picker';
 
 import { Colors, styles } from '../Components';
 
-const url = 'https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=%25s&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e&';
 
-const headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'User-Agent': 'AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1'
-};
+const encodedBody = (obj) => {
+    var body = { 'sl' : 'auto', 'tl' : obj.state.language, 'q' : obj.state.source   };
+    var formBody = [];
+    for ( var item in body ) {
+        var key = encodeURIComponent(item);
+        var val = encodeURIComponent(body[item]);
+        formBody.push(key + "=" + val);
+    }
+    return formBody.join('&');
+}
+
+const TargetText = (props) => {
+    var text = '';
+    if ( props.data ) {
+        for ( var i = 0 ; i < props.data.length ; ++i ) {
+            if ( props.data[i]['trans'] ) {
+            text = text + props.data[i]['trans'] + ' ';
+            }
+        }
+    }
+    return(
+        <Text style={styles.sectionDescription}>{text}</Text>
+    );
+}
 
 class Controller extends Component {
+    constructor(props) {
+        super(props);
+        this.pressEvent = this.pressEvent.bind(this);
+    }
     state = {
-        source      : '',
-        language    : 'fr',
-        target      : '',
-        data        : [],
+        source: 'Hello world!',
+        language: 'fr',
+        target: 'Bonjour le monde!',
+        data: []
     };
 
-    parseData = (json) => {
-        var text = '';
-        for ( var i = 0; i < json.length; ++i ) {
-            text = text + ' ' + json.trans;
-        }
-        this.setState({ data : json });
-        this.setState({ target : text });
-        this.setState({ loading : false });
-    }
-
-    onPress = () => {
-        var body = { 'sl' : 'auto', 'tl' : this.state.language, 'q' : this.state.source };
-        var formBody = [];
-        for ( var key in body ) {
-            var encodedKey = encodeURIComponent(key);
-            var encodedValue = encodeURIComponent(body[key]);
-            formBody.push(encodedKey + "=" + encodedValue);
-        }
-        formBody = formBody.join('&');
-        fetch( url, { method : 'POST', headers : headers, body : formBody })
+    pressEvent(e) {
+        fetch( 'https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=%25s&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e&', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'User-Agent': 'AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1' },
+                body: encodedBody(this)})
         .then((response) => response.json())
-        .then((json) => this.parseData(json.sentences))
-        .catch((err) => console.error(err))
-        .finally(() => this.setState({ loading : false }));
+        .then((json) => this.setState({ data : json.sentences }))
+        .catch((err) => console.error(err));
     }
 
     render() {
@@ -75,7 +84,7 @@ class Controller extends Component {
             <View style={styles.sectionContainer}>
                 <Picker
                     selectedValue={ this.state.language }
-                    onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
+                    onValueChange={(val, idx) => this.setState({language: val})}>
                     <Picker.Item label="afrikaans" value="af" />
                     <Picker.Item label="albanian" value="sq" />
                     <Picker.Item label="amharic" value="am" />
@@ -188,22 +197,18 @@ class Controller extends Component {
             {/* END picker */}
 
             {/* target */}
-
             <View style={styles.sectionContainer}>
-                <View style={{ backgroundColor: Colors.purple }}>
-                    <Button
-                        title="Translate"
-                        color={Colors.white}
-                        onPress={this.onPress}
-                        />
-                </View>
-                <View style={[styles.bordered, {marginTop: 32, flex: 1, justifyContent: 'center'}]}>
-                    <Text
-                        style={[styles.sectionDescription, {textAlign: 'center'}]}>
-                        { this.state.target }
-                    </Text>
-                </View>
+                <View style={{ backgroundColor: Colors.purple}}>
+                <Button
+                    title="Translate"
+                    color={Colors.white}
+                    onPress={this.pressEvent}
+                    />
             </View>
+                <View style={[styles.bordered, {marginTop: 12, flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
+                <TargetText data={this.state.data} />
+            </View>
+        </View>
             {/* END target */}
             </>
         );

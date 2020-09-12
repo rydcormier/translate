@@ -22,7 +22,6 @@ import {
     Header,
     Colors,
     Controller,
-    AppController,
     styles
 } from './src/Components';
 
@@ -41,7 +40,7 @@ const App: () => React$Node = () => {
 
                     {/* controller */}
                     <View style={styles.container}>
-                        <AppController />
+                        <Controller />
                     </View>
                     {/* END controller */}
 

@@ -6,7 +6,7 @@ Translation API.
 Usage  
 =====
 
-usage:  translate [options] -s|--src <LANG> -t|--targ <LANG> [TEXT]
+usage:  translate [options] (t|--targ) LANG [TEXT]
 
 Options:
 

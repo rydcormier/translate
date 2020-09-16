@@ -1,12 +1,12 @@
 # translate
 translate is a simple, easy-to-use command line interface for the Google
-Translation API.
+Translation API. Both a bash and python script are provided.
 
 
 Usage  
 =====
 
-usage:  translate [options] -s|--src <LANG> -t|--targ <LANG> [TEXT]
+usage:  translate.(sh | py) [options] -s|--src <LANG> -t|--targ LANG [TEXT]
 
 Options:
 
@@ -36,12 +36,12 @@ Exits with 0 on success and 1 otherwise.
 Example
 =======
 
-    translate -i source.txt -o target.txt -s en -t fr
+    translate.(sh | py) -i source.txt -o target.txt -s en -t fr
 
 This call translates the english text in source.txt to french and writes
 the result to target.txt.
 
-    translate -i source.txt -o target.txt -t fr
+    translate.(sh | py) -i source.txt -o target.txt -t fr
 
 This is an equivalent call, letting the translator determine the source
 language.

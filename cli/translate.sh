@@ -25,7 +25,7 @@ LANGFILE='languages.txt'
 
 # Use curl to make the HTTP request
 if ! command -v curl &> /dev/null; then
-    echo "Error: curl could not be found. Aborting"
+    echo "Error: curl could not be found. Aborting."
     exit 1
 fi
 
@@ -34,7 +34,7 @@ fi
 declare -a LANGUAGES
 declare -a LANGCODES
 let i=0
-{ 
+{
     while read LINE; do
         LANGUAGES[i]="${LINE%%[[:space:]]*}"
         LANGCODES[i]="${LINE##*[[:space:]]}"
@@ -43,8 +43,8 @@ let i=0
 }<languages.txt
 
 
-# Given a language name, if it is valid, print the corresponding code to 
-# stdin. Given a valid code, print that. Otherwise, do nothing. Return 1 
+# Given a language name, if it is valid, print the corresponding code to
+# stdin. Given a valid code, print that. Otherwise, do nothing. Return 1
 # if a match is found. Return 0 otherwise.
 #
 function get_code {
@@ -60,7 +60,7 @@ function get_code {
 }
 
 
-# make all opts short for getopts
+# make all opts short
 for arg in "$@"; do
     shift
     case "$arg" in
@@ -87,7 +87,7 @@ while getopts "hi:lo:s:t:" opt; do
                 >&2 echo "Error: Unable to read from ${OPTARG}."
                 exit 1
             fi
-            TEXT="$(cat ${OPTARG})"
+            TEXT="$(cat ${OPTARG} | tr '\r\n' ' ')"
             ;;
         l)
             cat "${LANGFILE}"
@@ -98,6 +98,7 @@ while getopts "hi:lo:s:t:" opt; do
                 >&2 echo "Error: Unable to write to ${OPTARG}."
                 exit 1
             fi
+            OUTPUT="${OPTARG}"
             ;;
         s)
             SRC="$(get_code "${OPTARG}")"
@@ -127,33 +128,43 @@ if [ -z "${TARGET}" ]; then
     exit 1
 fi
 
-# quote text if reading from stdin
-if [ -z "${TEXT}" ]; then
-    TEXT="$*"
-fi
-
 # add data to HTTP request
-DATA="--data-urlencode sl="${SRC:-auto}" --data-urlencode tl="${TARGET}" --data-urlencode q='"${TEXT}"'" 
+DATA="--data-urlencode sl="${SRC:-auto}" --data-urlencode tl="${TARGET}" --data-urlencode q='"${TEXT}"'"
 
-tmpfile=$(mktemp /tmp/abc-script.XXXXXX)
 
+# use a temp file for the response
+tmpfile="$(mktemp /tmp/tmp.XXXXX)"
+
+# Get the response and only keeep the "trans" values
 curl --silent --location --request POST 'https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=%25s&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e&' \
     --header 'Content-Type: application/x-www-form-urlencoded' \
     --header 'User-Agent: AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1' \
     --data-urlencode sl="${SRC:-auto}" \
     --data-urlencode tl="${TARGET}" \
-    --data-urlencode q="${TEXT}" > "${tmpfile}"
+    --data-urlencode q="${TEXT:-$*}" | grep -o '"trans":"[^"]*"' > "$tmpfile"
 
-
-if [ $? -ne 0 ]; then
-    >&2 echo "Error: curl exited with $?"
+# make sure we got something
+if ! [ -s "${tmpfile}" ]; then
+    >&2 echo "Error: Unable to get HTTP response."
     rm "${tmpfile}"
     exit 1
 fi
 
-cat "${tmpfile}"
+# extract and combine the translated sentences
+RESULT=''
+{ while read line; do
+    trans="${line#*:\"}"
+    trans="${trans%\"}"
+    RESULT="${RESULT}${trans}"
+done }<"${tmpfile}"
+
 rm "${tmpfile}"
 
+# TODO: add more decoding. For now just convert the apostrophes
+if [ -n "${OUTPUT}" ]; then
+    echo ${RESULT//u0027/\'} > "${OUTPUT}"
+else
+    echo ${RESULT//u0027/\'}
+fi
 
-#TODO parse json response
 exit

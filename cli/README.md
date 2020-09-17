@@ -6,11 +6,7 @@ Translation API. Both a bash and python script are provided.
 Usage  
 =====
 
-<<<<<<< HEAD
 usage:  translate.(sh | py) [options] (-t |--targ) LANG [TEXT]
-=======
-usage:  translate [options] (t|--targ) LANG [TEXT]
->>>>>>> 39039c6a4950dd895813ca9c51efb36eaf958c36
 
 Options:
 

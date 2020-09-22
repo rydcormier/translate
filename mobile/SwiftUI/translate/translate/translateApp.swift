@@ -1,14 +1,14 @@
 //
-//  translateApp.swift
-//  translate
+//  TranslateApp.swift
+//  Translate
 //
-//  Created by Ryan Cormier on 9/21/20.
+//  Created by Ryan Cormier on 9/22/20.
 //
 
 import SwiftUI
 
 @main
-struct translateApp: App {
+struct TranslateApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

@@ -1,8 +1,8 @@
 //
 //  ContentView.swift
-//  translate
+//  Translate
 //
-//  Created by Ryan Cormier on 9/21/20.
+//  Created by Ryan Cormier on 9/22/20.
 //
 
 import SwiftUI

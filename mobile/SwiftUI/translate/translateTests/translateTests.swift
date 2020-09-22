@@ -1,14 +1,14 @@
 //
-//  translateTests.swift
-//  translateTests
+//  TranslateTests.swift
+//  TranslateTests
 //
-//  Created by Ryan Cormier on 9/21/20.
+//  Created by Ryan Cormier on 9/22/20.
 //
 
 import XCTest
-@testable import translate
+@testable import Translate
 
-class translateTests: XCTestCase {
+class TranslateTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

@@ -124,6 +124,9 @@ def main():
         headers=API['headers'], data=data, method=API['method'])
     try:
         with urllib.request.urlopen(request) as response:
+            with open('res.txt', 'w') as fp:
+                fp.write(request._full_url + '\n\n')
+                fp.write(response.read())
             translation = json.load(response)
     except Exception as e:
         sys.stderr.write('Unable to process HTTP request: {}\n'.format(e))

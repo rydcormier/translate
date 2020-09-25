@@ -9,9 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NavigationView {
-        Controller()
-            .environmentObject(Input())
+        GeometryReader { geometry in
+            
+            TranslatorView(source: "auto", target: "fr", input: "Hello world!", output: "Bonjour le monde!")
+                //.padding(.top, geometry.size.height * 0.1)
+            Image(decorative: "banner")
+                .position(x: geometry.size.width * 0.65, y: geometry.size.height * 0.07)
         }
     }
 }

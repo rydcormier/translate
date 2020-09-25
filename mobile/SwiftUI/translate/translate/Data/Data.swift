@@ -11,6 +11,10 @@ import SwiftUI
 
 let languages: [Language] = load("languages.json")
 
+// These are for decoding the json response
+struct Response: Codable { var sentences: [Sentence] }
+struct Sentence: Codable { var trans: String }
+
 struct Language: Hashable, Codable, Identifiable {
     var name:   String
     var value:  String

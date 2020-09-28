@@ -1,34 +1,32 @@
 //
-//  Data.swift
-//  Translate
+//  LanguageData.swift
+//  translate
 //
-//  Created by Ryan Cormier on 9/22/20.
+//  Created by Ryan Cormier on 9/25/20.
 //
 
 import Foundation
-import UIKit
 import SwiftUI
 
 let languages: [Language] = load("languages.json")
 
+<<<<<<< HEAD:mobile/SwiftUI/translate/translate/Data/Data.swift
 // These are for decoding the json response
 struct Response: Codable { var sentences: [Sentence] }
 struct Sentence: Codable { var trans: String }
 
 struct Language: Hashable, Codable, Identifiable {
+=======
+struct Language: Codable, Identifiable {
+    var id:     Int
+>>>>>>> dev:mobile/SwiftUI/translate/translate/LanguageData.swift
     var name:   String
     var value:  String
-    var id:     Int
-    
-    static let autoDetect = Language(name: "auto detect", value: "auto", id: 0)
-    static let testLang = Language(name: "french", value: "fr", id: 27)
-    
-    init(name: String, value: String, id: Int) {
-        self.name   = name
-        self.value  = value
-        self.id     = id
-    }
 }
+
+struct Sentence : Codable { var trans: String }
+struct Response: Codable { var sentences: [Sentence] }
+
 
 func load<T: Decodable>(_ filename: String) -> T {
     let data: Data
@@ -51,4 +49,3 @@ func load<T: Decodable>(_ filename: String) -> T {
         fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
     }
 }
-

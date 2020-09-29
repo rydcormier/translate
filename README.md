@@ -1,16 +1,15 @@
 # translate
 
 Originally a cli for a practice programming challenge on [Topcoder](https://www.topcoder.com), __translate__ is now a cross-platform translation app
-that leverages the Google Translation API and allows me to practice using
-all the frameworks I have used in the past.
+that leverages the Google Translation API.
 
-![Screenshot](screen_shot3.png)
+![Screenshot](screen_shot2020-09-29.png)
 ios app with SwiftUI
 
-![Screenshot](screen_shot2.png)  
+![Screenshot](screen_shot2020-09-12.png)  
 Bash and Python scripts are working.
 
-![Screenshot](screen_shot.png)   
+![Screenshot](screen_shot2020-09-10.png)   
 working prototype in ios using React Native.
 
 ## License

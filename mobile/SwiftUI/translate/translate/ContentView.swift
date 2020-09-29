@@ -2,106 +2,134 @@
 //  ContentView.swift
 //  translate
 //
-//  Created by Ryan Cormier on 9/25/20.
+//  Created by Ryan Cormier on 9/28/20.
 //
+//  The main view for the translate app.
+//
+
 import Foundation
 import SwiftUI
 
 struct ContentView: View {
-    @State var source:  String = "auto"
-    @State var target:  String = "fr"
-    @State var input:   String = ""
-    @State var output:  String = ""
+    //  The view takes the source language, target language, and the source
+    //  text and requests the translation which is stored in the string output.
+    @State var input: String = ""
+    @State var output: String = ""
+    @State var source: String = "auto"
+    @State var target: String = "zh-cn"
+    
+    init() {
+        // There is no section header or navigation bar. This moves the
+        //  form closer to the top
+        UITableView.appearance().contentInset.top = -35
+    }
     
     var body: some View {
-<<<<<<< HEAD
+        // A Form inside a NavigationView handles the user input and displays
+        // the requested translation
         GeometryReader { geometry in
             
-            TranslatorView(source: "auto", target: "fr", input: "Hello world!", output: "Bonjour le monde!")
-                //.padding(.top, geometry.size.height * 0.1)
-            Image(decorative: "banner")
-                .position(x: geometry.size.width * 0.65, y: geometry.size.height * 0.07)
-=======
-        GeometryReader {geometry in
-                NavigationView {
-                    VStack(alignment: .center) {
+            NavigationView {
+                
+                VStack(alignment: .center) {
+                    
+                    // Add logo to top left
+                    HStack(alignment: .top) {
+                        Spacer()
+                        Image("logo")
+                    }
+                    .padding()
+                    
                     Form {
-                        Picker("source", selection:$source) {
+                        
+                        // source language
+                        Picker("source language", selection: $source) {
                             Text("auto detect").tag("auto")
-                            ForEach(languages) { lang in
-                                Text(lang.name).tag(lang.value)
+                            ForEach(languages) { l in
+                                Text(l.name).tag(l.value)
                             }
                         }
+                        
+                        // input text
                         TextField("Enter some text", text: $input)
                             .font(.title2)
-                            .frame(minHeight: geometry.size.height * 0.27,
-                                   alignment: .topLeading)
+                            .frame(minHeight: geometry.size.height * 0.28, alignment: .topLeading)
+                            .padding(.top)
                         
-                        Picker("target", selection: $target) {
-                            ForEach(languages) { lang in
-                                Text(lang.name).tag(lang.value)
+                        // target language
+                        Picker("target language", selection: $target) {
+                            ForEach(languages) { l in
+                                Text(l.name).tag(l.value)
                             }
                         }
                         
-                        TextField("", text: $output)
+                        // output text
+                        Text(self.output)
                             .font(.title2)
-                            .frame(minHeight: geometry.size.height * 0.27,
-                                   alignment: .topLeading)
-                        HStack {
+                            .frame( minHeight: geometry.size.height * 0.28,
+                                    alignment: .topLeading)
+                            .padding(.top)
+                        
+                        // iniate translation
+                        HStack(alignment: .center) {
                             Spacer()
-                            
-                            Button("Translate", action: { self.requestTranslation() })
+                            Button("Translate", action: { requestTranslation() })
                                 .font(.title)
-                            
                             Spacer()
                         }
                         
                     }
-                    .navigationBarItems(trailing: Image("logo").resizable().clipped())
                 }
-                }
-                .frame(maxHeight: .infinity)
+                .navigationBarTitle("translate")
+                .navigationBarHidden(true)
             }
-            .edgesIgnoringSafeArea(.top)
+        }
     }
     
     func requestTranslation() {
-        let url = URL(string: "https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=%25s&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e")!
+        //  Request a translation from the server, decode the response, and
+        //  store the result in output
         
-        let headers = [
-            "Content-Type": "application/x-www-form-urlencoded",
-            "User-Agent": "AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1"]
-        
-        let queryItems: [URLQueryItem] = [
+        // build request from components
+        var components = URLComponents(url: API.url, resolvingAgainstBaseURL: true)
+        components?.queryItems! += [
             URLQueryItem(name: "sl", value: self.source),
             URLQueryItem(name: "tl", value: self.target),
             URLQueryItem(name: "q", value: self.input)
         ]
         
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-        
-        components?.queryItems! += queryItems
-        
         var request = URLRequest(url: (components?.url)!)
         
-        for (key, val) in headers {
-            request.setValue(val, forHTTPHeaderField: key)
->>>>>>> dev
+        // add method and headers
+        request.httpMethod = "POST"
+        for (name, value) in API.headers {
+            request.setValue(value, forHTTPHeaderField: name)
         }
         
+        // start the data task
         URLSession.shared.dataTask(with: request) { data, res, err in
             if let data = data {
+                print(data)
                 if let response = try? JSONDecoder().decode(Response.self, from: data) {
+                    var output = response.sentences.map(
+                        { s in s.trans ?? "" }).joined()
                     
+                    //  There may be alternate character representation. Add it
+                    //  if it exists
+                    let alt_output = response.sentences.map(({ s in s.translit ?? "" })).joined()
+                    if (!alt_output.isEmpty) {
+                        output = [ output, alt_output ].joined(separator: "\n\n")
+                    }
+                    
+                    // State change
                     DispatchQueue.main.async {
-                        self.output = response.sentences.map({ s in s.trans }).joined()
+                        self.output = output
                     }
                 }
             }
         }
         .resume()
     }
-
 }
 
 struct ContentView_Previews: PreviewProvider {

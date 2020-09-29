@@ -2,7 +2,7 @@
 //  translateApp.swift
 //  translate
 //
-//  Created by Ryan Cormier on 9/25/20.
+//  Created by Ryan Cormier on 9/28/20.
 //
 
 import SwiftUI

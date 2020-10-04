@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+  <style>
+
+      body {
+          background-image: radial-gradient(rgb(255, 255, 255), rgb(214, 238, 249), rgb(200, 200, 200));
+      }
+      textarea {
+          min-height: 100px
+      }
+
+  </style>
+{% endblock style %}
+
+{% block body %}
+
+  <div class="container" style="align-content: center">
+  <div class="row">
+    <div class="12 column" style="margin-top: 25px">
+      <img src="{% static '/translate/images/banner/banner256.png' %}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="one column">
+        <form action="/translate/" method="post">
+    {% csrf_token %}
+    {{ form.source }}
+    {{ form.input }}
+    {{ form.target }}
+    {{ form.output }}
+    <input class="button-primary" type="submit" value="Translate">
+  </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="one column">
+    </div>
+  </div>
+  </div>
+
+
+
+
+{% endblock body %}

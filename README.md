@@ -3,7 +3,7 @@
 Originally a cli for a practice programming challenge on [Topcoder](https://www.topcoder.com), __translate__ is now a cross-platform translation app
 that leverages the Google Translation API.
 
-![Screenshot](screen_shot2020-10-04.png)
+![Screenshot](screen_shot2020-10-05.png)
 Web app with django.
 
 ![Screenshot](screen_shot2020-09-29.png)   

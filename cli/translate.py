@@ -119,21 +119,21 @@ def main():
 
     # encode data and use API to make HTTP request
     data = { 'sl': opts['source'], 'tl': opts['target'], 'q': opts['text'] }
-    data = urllib.parse.urlencode(data).encode('ascii')
+    data = urllib.parse.urlencode(data).encode('utf-8')
     request = urllib.request.Request(API['url'],
         headers=API['headers'], data=data, method=API['method'])
     try:
         with urllib.request.urlopen(request) as response:
-            with open('res.txt', 'w') as fp:
-                fp.write(request._full_url + '\n\n')
-                fp.write(response.read())
             translation = json.load(response)
     except Exception as e:
         sys.stderr.write('Unable to process HTTP request: {}\n'.format(e))
         sys.exit(1)
-
-    # we want the 'trans' items in 'sentences': watch for random brackets and quotes
-    target = ' '.join(s['trans'].strip("' []") for s in translation['sentences'])
+    
+    # get 'trans' and 'translit' which are nested in 'sentences'
+    sentences = translation.get('sentences', [])
+    target = (' '.join(s.get('trans', '') for s in sentences) + '\n' + 
+             ' '.join(s.get('translit', '') for s in sentences)).strip()
+    
     if 'output' in opts:
         # output file has not been verified
         try:

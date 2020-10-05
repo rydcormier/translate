@@ -1,8 +1,11 @@
+# translate/models.py
 import json
 import urllib
 
 from django.db import models
 
+
+# supported languages
 LANGUAGES = ( ('auto', 'detect language'),
     ('af', 'afrikaans'), ('sq', 'albanian'), ('am', 'amharic'),
     ('ar', 'arabic'), ('hy', 'armenian'), ('az', 'azerbaijani'),
@@ -37,6 +40,7 @@ LANGUAGES = ( ('auto', 'detect language'),
     ('xh', 'xhosa'), ('yi', 'yiddish'), ('yo', 'yoruba'), ('zu', 'zulu')
 )
 
+# API
 URL = """https://translate.google.com/translate_a/single?client=at&dt=t&dt=\
 ld&dt=qca&dt=rm&dt=bd&dj=1&hl=%25s&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b\
 944-fa62-4b55-b330-74909a99969e&"""
@@ -47,6 +51,9 @@ HEADERS = {
     'AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1'
 }
 
+
+# The translation object: the input string, the output string, and the source
+# and target languages.
 class Translation(models.Model):
     input = models.TextField()
     output = models.TextField(blank=True)

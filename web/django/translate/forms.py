@@ -1,13 +1,14 @@
+# translate/forms.py
 from django import forms
 
 from .models import Translation
 
 
 class TranslationForm(forms.ModelForm):
-
     class Meta:
         model = Translation
         fields = [ 'source', 'input', 'target', 'output']
+
 
     def __init__(self, translation=None, *args, **kwargs):
         try:

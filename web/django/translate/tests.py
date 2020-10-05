@@ -1,8 +1,8 @@
+# translate/test.py
 from django.test import TestCase
 
 from .forms import TranslationForm
 from .models import Translation
-from .views import translate
 
 def gen_data(source='auto', target='fr', input='Hello, world!'):
     return { 'source': source, 'target': target, 'input': input }
@@ -10,32 +10,34 @@ def gen_data(source='auto', target='fr', input='Hello, world!'):
 class TranslationModelTests(TestCase):
 
     def test_translate(self):
-        """test_translation() checks that the trans field is set correctly."""
+        """test_translation() checks that the translation is fetched and
+        set correctly.
+        """
         translation = Translation(**gen_data())
         translation.translate()
         self.assertEqual('Bonjour le monde!', translation.output)
 
     def test_translate_with_translit(self):
-        """test_translate_with_translit() checks that translate gets
-        translit as well.
+        """test_translate_with_translit() checks that a transliteration
+        is fetched if it exists.
         """
         translation = Translation(**gen_data(target='zh-cn'))
         translation.translate()
-        self.assertTrue(len(translation.output.split()) > 1)
+        self.assertRegex(translation.output, 'Nǐ hǎo.* shìjiè')
 
 
 class TranslationFormTests(TestCase):
 
     def test_choice_fields(self):
         """text_choice_fields() verifies that 'auto' is a 'source' choice
-        and not a 'target' choice.
+        but not a 'target' choice.
         """
         form = TranslationForm()
         self.assertIn(('auto', 'detect language'), form.fields['source'].choices)
         self.assertNotIn(('auto', 'detect language'), form.fields['target'].choices)
 
     def test_validation(self):
-        """test_validation() checks for proper validation."""
+        """test_validation() checks that the form is validated correctly."""
         data = gen_data()
         form = TranslationForm(data)
         self.assertTrue(form.is_valid())
@@ -67,6 +69,9 @@ class TranslateViewTests(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_bad_post_request(self):
+        """test_bad_post_request() verifies that given invalid post data, the
+        view returns with an error message.
+        """
         data = gen_data(input='')
         response = self.client.post('/translate/', data)
         form = response.context.get('form')

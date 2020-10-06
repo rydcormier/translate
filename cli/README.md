@@ -6,7 +6,7 @@ Translation API. Both a bash and python script are provided.
 Usage  
 =====
 
-usage:  translate.(sh | py) [options] (-t |--targ) LANG [TEXT]
+usage:  translate.(sh | py) [options] (-t |--targ) LANGUAGE [TEXT]
 
 Options:
 
@@ -36,12 +36,12 @@ Exits with 0 on success and 1 otherwise.
 Example
 =======
 
-    translate.(sh | py) -i source.txt -o target.txt -s en -t fr
+    translate.(sh | py) -i source.txt -o target.txt -s en -t zh-cn
 
-This call translates the english text in source.txt to french and writes
+This call translates the english text in source.txt to chinese and writes
 the result to target.txt.
 
-    translate.(sh | py) -i source.txt -o target.txt -t fr
+    translate.(sh | py) -i source.txt -o target.txt -t zh-cn
 
 This is an equivalent call, letting the translator determine the source
 language.

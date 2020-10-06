@@ -1,1 +1,2 @@
-C'est mon premier défi Topcoder.  Je ne sais pas ce que je pense de l'ensemble du processus.  Il est trop tôt pour le dire.  Si vous lisez ceci, j'espère que tout va bien et j'espère que ce programme fonctionne.
+这是一个句子。这是另一句话。在一起，它们是一个考验。
+Zhè shì yīgè jùzi. Zhè shì lìng yījù huà. Zài yīqǐ, tāmen shì yīgè kǎoyàn.

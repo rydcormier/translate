@@ -29,18 +29,34 @@ if ! command -v curl &> /dev/null; then
     exit 1
 fi
 
+declare -a LANGUAGES=( "afrikaans" "albanian" "amharic" "arabic" "armenian" "azerbaijani"
+"basque" "belarusian" "bengali" "bosnian" "bulgarian" "catalan" "cebuano"
+"chichewa" "chinese (simplified)" "chinese (traditional)" "corsican" "croatian"
+"czech" "danish" "dutch" "english" "esperanto" "estonian" "filipino" "finnish"
+"french" "frisian" "galician" "georgian" "german" "greek" "gujarati" "haitian
+creole" "hausa" "hawaiian" "hebrew" "hebrew" "hindi" "hmong" "hungarian"
+"icelandic" "igbo" "indonesian" "irish" "italian" "japanese" "javanese"
+"kannada" "kazakh" "khmer" "korean" "kurdish (kurmanji)" "kyrgyz" "lao" "latin"
+"latvian" "lithuanian" "luxembourgish" "macedonian" "malagasy" "malay"
+"malayalam" "maltese" "maori" "marathi" "mongolian" "myanmar (burmese)" "nepali"
+"norwegian" "odia" "pashto" "persian" "polish" "portuguese" "punjabi" "romanian"
+"russian" "samoan" "scots gaelic" "serbian" "sesotho" "shona" "sindhi" "sinhala"
+"slovak" "slovenian" "somali" "spanish" "sundanese" "swahili" "swedish" "tajik"
+"tamil" "telugu" "thai" "turkish" "ukrainian" "urdu" "uyghur" "uzbek"
+"vietnamese" "welsh" "xhosa" "yiddish" "yoruba" "zulu" )
 
-# get supported languages.  TODO: add filter for chinese
-declare -a LANGUAGES
-declare -a LANGCODES
-let i=0
-{
-    while read LINE; do
-        LANGUAGES[i]="${LINE%%[[:space:]]*}"
-        LANGCODES[i]="${LINE##*[[:space:]]}"
-        let i++
-    done
-}<languages.txt
+declare -a LANGCODES=( "af" "sq"
+"am" "ar" "hy" "az" "eu" "be" "bn" "bs" "bg" "ca" "ceb" "ny" "zh-cn" "zh-tw"
+"co" "hr" "cs" "da" "nl" "en" "eo" "et" "tl" "fi" "fr" "fy" "gl" "ka" "de" "el"
+"gu" "ht" "ha" "haw" "iw" "he" "hi" "hmn" "hu" "is" "ig" "id" "ga" "it" "ja"
+"jw" "kn" "kk" "km" "ko" "ku" "ky" "lo" "la" "lv" "lt" "lb" "mk" "mg" "ms" "ml"
+"mt" "mi" "mr" "mn" "my" "ne" "no" "or" "ps" "fa" "pl" "pt" "pa" "ro" "ru" "sm"
+"gd" "sr" "st" "sn" "sd" "si" "sk" "sl" "so" "es" "su" "sw" "sv" "tg" "ta" "te"
+"th" "tr" "uk" "ur" "ug" "uz" "vi" "cy" "xh" "yi" "yo" "zu"  )
+
+declare -i NUM_LANGS=${#LANGUAGES[@]}
+
+declare -i JSON=0
 
 
 # Given a language name, if it is valid, print the corresponding code to
@@ -49,7 +65,6 @@ let i=0
 #
 function get_code {
     local lang="$*"
-    local NUM_LANGS="${#LANGUAGES[@]}"
     for ((i=0;i < NUM_LANGS;i++)); do
         if [ "${lang}" == "${LANGUAGES[i]}" ] || [ "${lang}" == "${LANGCODES[i]}" ]; then
             echo "${LANGCODES[i]}"
@@ -66,6 +81,7 @@ for arg in "$@"; do
     case "$arg" in
         "--help")   set -- "$@" "-h" ;;
         "--input")  set -- "$@" "-i" ;;
+        "--json")   set -- "$@" "-j" ;;
         "--list")   set -- "$@" "-l" ;;
         "--output") set -- "$@" "-o" ;;
         "--source") set -- "$@" "-s" ;;
@@ -76,7 +92,7 @@ done
 
 # parse options
 OPTIND=1
-while getopts "hi:lo:s:t:" opt; do
+while getopts "hi:jlo:s:t:" opt; do
     case "$opt" in
         h)
             echo "$HELP"
@@ -89,8 +105,13 @@ while getopts "hi:lo:s:t:" opt; do
             fi
             TEXT="$(cat ${OPTARG} | tr '\r\n' ' ')"
             ;;
+        j)
+            JSON=1
+            ;;
         l)
-            cat "${LANGFILE}"
+            for ((i=0;i<NUM_LANGS;i++)); do
+              printf '%-21s\t%s\n' "${LANGUAGES[i]}" "${LANGCODES[i]}"
+            done
             exit
             ;;
         o)
@@ -141,7 +162,7 @@ curl --silent --location --request POST 'https://translate.google.com/translate_
     --header 'User-Agent: AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1' \
     --data-urlencode sl="${SRC:-auto}" \
     --data-urlencode tl="${TARGET}" \
-    --data-urlencode q="${TEXT:-$*}" | grep -o '"trans":"[^"]*"' > "$tmpfile"
+    --data-urlencode q="${TEXT:-$*}" > "$tmpfile"
 
 # make sure we got something
 if ! [ -s "${tmpfile}" ]; then
@@ -152,19 +173,40 @@ fi
 
 # extract and combine the translated sentences
 RESULT=''
-{ while read line; do
-    trans="${line#*:\"}"
-    trans="${trans%\"}"
-    RESULT="${RESULT}${trans}"
-done }<"${tmpfile}"
+ALT_RESULT=''
+if [ ${JSON} -gt 0 ]; then
+  RESULT="$( cat "${tmpfile}" )"
+else
+  tmpfile2="$(mktemp /tmp/tmp.XXXXX)"
+  grep -o '"trans":"[^"]*"' "${tmpfile}" > "${tmpfile2}"
+  { while read line; do
+      trans="${line#*:\"}"
+      trans="${trans%\"}"
+      RESULT="${RESULT}${trans}"
+    done }<"${tmpfile2}"
+  grep -o '"translit":"[^"]*"' "${tmpfile}" > "${tmpfile2}"
+  { while read line; do
+      trans="${line#*:\"}"
+      trans="${trans%\"}"
+      ALT_RESULT="${ALT_RESULT}${trans}"
+    done }<"${tmpfile2}"
+  rm "${tmpfile2}"
+
+fi
 
 rm "${tmpfile}"
 
 # TODO: add more decoding. For now just convert the apostrophes
 if [ -n "${OUTPUT}" ]; then
     echo ${RESULT//u0027/\'} > "${OUTPUT}"
+    if [ -n "${ALT_RESULT}" ]; then
+      echo ${ALT_RESULT//u0027/\'} >> "${OUTPUT}"
+    fi
 else
     echo ${RESULT//u0027/\'}
+    if [ -n "${ALT_RESULT}" ]; then
+      echo ${ALT_RESULT//u0027/\'}
+    fi
 fi
 
 exit

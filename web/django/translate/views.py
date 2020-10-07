@@ -13,4 +13,3 @@ def translate(request):
         # populate the form with the updated translation
         form = TranslationForm(translation)
     return render(request, 'translate/translate.html', {'form': form })
-

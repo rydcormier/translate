@@ -138,7 +138,8 @@ def getOpts():
 
 def main():
     """Get options, make an HTTP request, parse the results and return the
-    translation"""
+    translation/transliteration.
+    """
 
     opts = getOpts()
     if 'error' in opts:

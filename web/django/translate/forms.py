@@ -5,6 +5,7 @@ from .models import Translation
 
 
 class TranslationForm(forms.ModelForm):
+    """Form for the Translation model."""
     class Meta:
         model = Translation
         fields = [ 'source', 'input', 'target', 'output']
@@ -22,4 +23,3 @@ class TranslationForm(forms.ModelForm):
             data = translation
 
         super().__init__(data, *args, **kwargs)
-

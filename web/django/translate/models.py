@@ -52,9 +52,10 @@ HEADERS = {
 }
 
 
-# The translation object: the input string, the output string, and the source
-# and target languages.
 class Translation(models.Model):
+    """A translation consists of the source language, the target language,
+    the input text, and the output text.
+    """
     input = models.TextField()
     output = models.TextField(blank=True)
     source = models.CharField(max_length=5, choices=LANGUAGES, default='auto')
@@ -85,5 +86,3 @@ class Translation(models.Model):
         trans.replace(chr(65281), chr(33))
 
         self.output = trans.strip()
-
-
